@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Job {
+  id                String      @id @default(uuid())
+  companyName       String
+  jobLocation       String
+  jobTitle          String
+  jobDescription    String?
+  initialSalaryRange Float
+  finalSalaryRange  Float
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  jobSkills         JobSkill[]
+  appliedUsers      AppliedUser[]
+}
+
+model User {
+  id          String      @id @default(uuid())
+  emailAddress String
+  fullName     String
+  password     String
+  userType     String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  appliedJobs  AppliedUser[]
+}
+
+model Skill {
+  id         String     @id @default(uuid())
+  skillName  String
+  createdAt  DateTime   @default(now())
+
+  jobSkills  JobSkill[]
+}
+
+model AppliedUser {
+  id        String    @id @default(uuid())
+  jobId     String
+  userId    String
+  createdAt DateTime  @default(now())
+
+  job       Job       @relation(fields: [jobId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model JobSkill {
+  id         String    @id @default(uuid())
+  jobId      String
+  skillId    String
+  createdAt  DateTime  @default(now())
+
+  job        Job       @relation(fields: [jobId], references: [id])
+  skill      Skill     @relation(fields: [skillId], references: [id])
+}
+
+

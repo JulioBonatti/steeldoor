@@ -33,3 +33,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# prisma
+prisma/steeldoor.db
+prisma/steeldoor.db-journal
+
+# package
+package-lock.json
+
+#.env  -> should be here
