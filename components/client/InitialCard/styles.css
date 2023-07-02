@@ -1,0 +1,27 @@
+.initial-card {
+    border: 1px solid #868686;
+    width: 19rem;
+    border-radius: 2rem;
+    padding-top: 20px;
+    background: #444444;
+    overflow: hidden;
+    margin: 20px
+}
+
+.initial-card:hover {
+    cursor: pointer;
+}
+
+.initial-card-title {
+    border-bottom: 1px solid #868686;
+    padding: 0px 30px;
+    font-size: 2rem;
+    background: #444444;
+}
+
+.initial-card-body {
+    width: 100%;
+    padding: 20px 30px;
+    text-align: center;
+    background: linear-gradient(#313131, #1b1b1b, #1b1b1b, #1b1b1b, #1b1b1b, #1b1b1b, #1b1b1b);
+}

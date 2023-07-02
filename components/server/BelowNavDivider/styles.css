@@ -1,0 +1,13 @@
+.below-nav-divider {
+    width: 100%;
+    padding-top: 4.2rem;
+    border-bottom: 1px solid #5a5a5a;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.nav-title {
+    margin: 5px 0px;
+    color: #e9e9e9;
+}

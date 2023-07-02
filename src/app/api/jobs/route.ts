@@ -4,7 +4,7 @@ import { JobKeys } from './jobs'
 import type { Job } from '@prisma/client'
 
 
-export async function GET(request: Request) {
+export async function GET() {
     const jobs = await prisma.job.findMany();
     return NextResponse.json(jobs, { status: 200 });
 }
