@@ -6,6 +6,7 @@ type Skill = {
     id: string,
     skillName: string,
 }
+
 type SkillbadgesProps = {
     skills: Skill[],
     selectedSkills: Skill[]

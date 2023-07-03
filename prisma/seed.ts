@@ -1,4 +1,4 @@
-const { Skill, PrismaClient } = require('@prisma/client');
+const { Skill, PrismaClient, User } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
@@ -28,7 +28,41 @@ async function seedSkills() {
   }
 }
 
-seedSkills()
+async function seedUser() {
+  const userToSeed = {
+    id: "4f20ae9b-aa0c-44b9-8d90-619181cd1a8d",
+    emailAddress: "seeker.job@gmail.com",
+    fullName: "Job Seeker",
+    password: "veryHardPwd",
+    userType: "user"
+  };
+
+  try {
+    await prisma.user.upsert({
+      where: { id: userToSeed.id },
+      update: {},
+      create: userToSeed
+    });
+    console.log(`User '${userToSeed.fullName}' seeded successfully`);
+  } catch (error) {
+    console.error('Error seeding user:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+async function runSeeds() {
+  seedUser()
+    .then(async () => {
+      await seedSkills()
+    }).catch(async (e) => {
+      console.error(e);
+      await prisma.$disconnect();
+      process.exit(1);
+    });
+}
+
+runSeeds()
   .then(async () => {
     await prisma.$disconnect();
   })
