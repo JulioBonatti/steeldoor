@@ -1,0 +1,10 @@
+.user-indicator-container {
+    position: fixed;
+    right: 2rem;
+    top: 1.4rem;
+}
+
+.logged-user {
+    margin: 5px 0px;
+    color: #e9e9e9;
+}

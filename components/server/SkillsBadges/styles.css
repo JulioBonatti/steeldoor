@@ -1,0 +1,16 @@
+.skills-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.skill-badge {
+    border-radius: 4px;
+    background: #6c757d;
+    color: #fafafa;
+    margin: 0px 4px;
+    padding: 0px 5px;
+}
+
+.skill-badge:hover {
+    cursor: pointer;
+}

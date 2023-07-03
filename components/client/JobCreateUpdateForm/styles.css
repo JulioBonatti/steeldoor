@@ -1,0 +1,8 @@
+.subtitle-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.sub-label {
+    font-weight: 100;
+}

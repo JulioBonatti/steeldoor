@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './globals.css'
 import SteelDoorNav from '../../components/server/SteelDoorNav';
 import { Inter } from 'next/font/google'
@@ -15,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" data-bs-theme="dark" >
       <body className={inter.className}>
         <SteelDoorNav />
         {children}

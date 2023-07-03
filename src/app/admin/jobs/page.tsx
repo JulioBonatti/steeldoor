@@ -1,32 +1,33 @@
-import type { Job } from '@prisma/client'
+import type { Skill } from '@prisma/client'
+import type { Job } from '../../api/utils/types'
 import { endpoints } from '../../../../components/utils/endpoints';
 import BelowNavDivider from '../../../../components/server/BelowNavDivider';
-import JobCard from '../../../../components/client/JobCard';
+import UserIndicator from '../../../../components/server/UserIndicator';
+import AddJobButton from '../../../../components/client/AddJobModal';
+import JobList from '../../../../components/client/JobList';
 import API from '../../api/utils/api';
+import './styles.css'
+
 
 const api = new API();
 
-async function fetchJobs(path: string) {
+async function fetchData() {
   const hostname: string | undefined = process.env.API_URL;
-  const jobs: Job[] = (await api.instance.get(`${hostname}${path}`)).data;
-  return jobs
+  const jobs: Job[] = (await api.instance.get(`${hostname}${endpoints.getJobs}`)).data;
+  const skills: Skill[] = (await api.instance.get(`${hostname}${endpoints.getSkills}`)).data;
+  return { jobs: jobs, skills: skills };
 }
 
 export default async function AdminDashboard() {
-  const { getJobs } = endpoints;
-  const jobs = await fetchJobs(getJobs);
+  const data = await fetchData();
+  const jobs = data.jobs;
+  const skills = data.skills;
   return (
     <main style={{ padding: '0px 20px', background: '#151515' }} >
-      <BelowNavDivider admin={true} />
-      <div style={{ paddingBottom: '4.2rem' }}>
-        {jobs.map(job => {
-          return (
-            <JobCard job={job} />
-          )
-        })
-        }
-        
-      </div>
+      <BelowNavDivider />
+      <JobList jobs={jobs} skills={skills} />
+      <UserIndicator admin={true} />
+      <AddJobButton skills={skills} />
     </main>
   )
 }

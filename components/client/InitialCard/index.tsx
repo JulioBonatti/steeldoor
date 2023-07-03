@@ -1,7 +1,6 @@
 "use client"
 import './styles.css';
 import { redirectToPath } from '../../utils/endpoints';
-import Card from 'react-bootstrap/Card';
 
 
 type InitialCardProps = {
@@ -12,14 +11,14 @@ type InitialCardProps = {
 }
 export default function InitialCard(props: InitialCardProps) {
     return (
-        <Card onClick={() => redirectToPath(props.path)} className="initial-card">
-            <Card.Title className="initial-card-title" >{props.title}</Card.Title>
-            <Card.Body className="initial-card-body">
-                <Card.Text style={{ fontSize: '1rem'}}>
+        <div onClick={() => redirectToPath(props.path)} className="initial-card">
+            <div className="initial-card-title" >{props.title}</div>
+            <div className="initial-card-body">
+                <div style={{ fontSize: '1rem'}}>
                     {props.bodyText}
                     <strong>{props.strong}</strong>
-                </Card.Text>
-            </Card.Body>
-        </Card>
+                </div>
+            </div>
+        </div>
     );
 }

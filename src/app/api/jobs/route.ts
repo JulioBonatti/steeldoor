@@ -5,7 +5,16 @@ import type { Job } from '@prisma/client'
 
 
 export async function GET() {
-    const jobs = await prisma.job.findMany();
+    const jobs = await prisma.job.findMany({
+        include: {
+            jobSkills: {
+                include: {
+                    skill: true,
+                },
+            },
+            appliedUsers: true,
+        },
+    });
     return NextResponse.json(jobs, { status: 200 });
 }
 

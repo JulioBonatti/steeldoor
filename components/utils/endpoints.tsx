@@ -1,13 +1,17 @@
 type Endpoints = {
     adminPage: string,
     seekerPage: string,
-    getJobs: string
+    getJobs: string,
+    createJobs: string,
+    getSkills: string
 }
 
 export const endpoints: Endpoints  = {
     adminPage: '/admin/jobs',
     seekerPage: '/seeker/jobs',
-    getJobs: '/api/jobs/'
+    getJobs: '/api/jobs/',
+    createJobs: '/api/jobs/',
+    getSkills: '/api/jobs/skills/'
 }
 
 export const redirectToPath = (path: string | undefined) => {
