@@ -9,11 +9,10 @@ import ClientJobFilter from '../../../../components/client/ClientJobFilter';
 
 export default function Home() {
   const [filteredJobs, setFilteredJobs] = useState([])
-  console.log('filteredJobs @@@@@@@@@@', filteredJobs)
   return (
     <main >
       <ClientJobFilter setFilteredJobs={setFilteredJobs} />
-      <BelowNavDivider style={{ paddingTop: '5px' }} />
+      <BelowNavDivider style={{ paddingTop: '10px' }} />
       <div style={{ paddingBottom: '4.2rem' }} className='page-container' >
         {filteredJobs.map((job: Job) => {
           return (
@@ -22,7 +21,7 @@ export default function Home() {
         })
         }
       </div>
-      <UserIndicator admin={true} />
+      <UserIndicator />
     </main>
   )
 }
