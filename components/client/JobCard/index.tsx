@@ -60,7 +60,7 @@ export default function JobCard(props: JobCardProps) {
     }
 
     const UserButton = () => {
-        if (props.admin && props.job.appliedUsers.length > 0) {
+        if (props.admin && props.job.appliedUsers?.length > 0) {
             return (
                 <>
                     <label style={{marginLeft: 'auto'}} >Applied user:
@@ -68,7 +68,7 @@ export default function JobCard(props: JobCardProps) {
                     </label>
                 </>
             )
-        } else if (!props.admin && props.job.appliedUsers.length === 0) {
+        } else if (!props.admin && props.job.appliedUsers?.length === 0) {
             return (
                 <>
                     <Button
