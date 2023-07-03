@@ -2,6 +2,7 @@
     position: fixed;
     right: 2rem;
     top: 1.4rem;
+    z-index: 600;
 }
 
 .logged-user {

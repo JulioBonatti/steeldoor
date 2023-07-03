@@ -1,8 +1,9 @@
 "use client"
 import type { AppliedUser } from '@prisma/client';
-import { endpoints } from '../../utils/endpoints';
+import { endpoints, userId } from '../../utils/endpoints';
 import { Job } from '../../../src/app/api/utils/types';
 import API from '../../../src/app/api/utils/api';
+import Button from 'react-bootstrap/Button';
 import './styles.css';
 
 
@@ -38,6 +39,13 @@ export default function JobCard(props: JobCardProps) {
         props.showHandler()
     }
 
+    const applyToJob = async () => {
+        const hostname = 'http://' + window.location.host;
+        const applicationObj = { jobId: props.job.id, userId: userId }
+        const response = await api.instance.post(`${hostname}${endpoints.jobApplication}`, applicationObj);
+        console.log('Applied')
+    }
+
     const AdminButtons = () => {
         if (props.admin) {
             return (
@@ -48,6 +56,25 @@ export default function JobCard(props: JobCardProps) {
             )
         } else {
             return (<></>)
+        }
+    }
+
+    const UserButton = () => {
+        if (props.admin) {
+            return (
+                <>
+                </>
+            )
+        } else {
+            return (
+                <>
+                    <Button
+                        onClick={applyToJob}
+                        variant="primary"
+                        style={{ float: 'right', marginLeft: 'auto' }}
+                    >Apply to Job</Button>
+                </>
+            )
         }
     }
 
@@ -91,6 +118,7 @@ export default function JobCard(props: JobCardProps) {
                 {skills.map(skill => {
                     return (<div key={skill} className="job-skill-badge">{skill}</div>)
                 })}
+                <UserButton />
             </div>
         </div>
     );

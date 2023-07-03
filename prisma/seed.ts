@@ -29,6 +29,7 @@ async function seedSkills() {
 }
 
 async function seedUser() {
+  // INFO: this is not supposed to work linke this, but since its a MVP...
   const userToSeed = {
     id: "4f20ae9b-aa0c-44b9-8d90-619181cd1a8d",
     emailAddress: "seeker.job@gmail.com",

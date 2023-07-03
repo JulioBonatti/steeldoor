@@ -199,7 +199,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                     </Row>
                 </Col>
             </Row>
-            <Button variant="primary" onClick={handleSubmit} style={{ float: 'right' }}>Create Job</Button>
+            <Button variant="primary" onClick={handleSubmit} style={{ float: 'right' }}>Submit!</Button>
             <Button variant="secondary" onClick={props.closeHandler} >Close</Button>
         </Form>
     );
