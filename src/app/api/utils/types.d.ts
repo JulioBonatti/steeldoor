@@ -22,9 +22,27 @@ export type Job = {
     finalSalaryRange: number,
     createdAt: string,
     updatedAt: string,
-    jobSkills: JobSkills[]
+    jobSkills: JobSkills[],
+    appliedUsers: AppiedUser[]
 }
 
+export type AppiedUser = {
+    id: string,
+    jobId: string,
+    userId: string,
+    createdAt: Date,
+    user: User
+}
+
+export type User = {
+    id: string,
+    emailAddress: string,
+    fullName: string,
+    password: string,
+    userType: string,
+    createdAt: Date,
+    updatedAt: Date
+}
 type JobObj = {
     id?: string,
     companyName: string,
