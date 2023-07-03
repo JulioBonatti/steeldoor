@@ -2,7 +2,7 @@
 import './styles.css';
 import { useState } from 'react';
 import { endpoints } from '../../utils/endpoints';
-import type { Job, Skill } from '../../../src/app/api/utils/types';
+import type { Job, JobObj, Skill } from '../../../src/app/api/utils/types';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -19,21 +19,10 @@ type JobCreateUpdateFormProps = {
     edit?: boolean
 }
 
-type JobObj = {
-    id?: string,
-    companyName: string,
-    jobLocation: string,
-    jobTitle: string,
-    jobDescription: string,
-    initialSalaryRange: number,
-    finalSalaryRange: number,
-    skillIds: string[],
-}
-
 const api = new API();
 
 export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
-    console.log(props.jobToEdit)
+    // TODO: this needs refactoring
     let initialObject = {
         jobTitle: 'Web application',
         jobDescription: 'This web application requires ...',
@@ -58,7 +47,6 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
     const [validated, setValidated] = useState(false);
     const [selectedSkills, setSkillList] = useState(initialSkill as Skill[])
     const [createJobObject, setCreateJobObject] = useState(initialObject as JobObj)
-
     const addSkill = (el: any) => {
         const selected: Skill = JSON.parse(el.target.value);
         const assertion = selectedSkills.map(slected => slected.id == selected.id).includes(true)
@@ -71,14 +59,11 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
 
     const onchangeInput = (event: any, key: string) => {
         let newCreateJobObj = structuredClone(createJobObject);
-        newCreateJobObj[key] = event.target.value;
+        (newCreateJobObj as any)[key] = event.target.value;
         if (key === 'initialSalaryRange' || key === 'finalSalaryRange') {
-            console.log('ta entrando aqui?', key)
-            newCreateJobObj[key] = parseFloat(event.target.value);
+            (newCreateJobObj as any)[key] = parseFloat(event.target.value);
         }
-        
         setCreateJobObject(newCreateJobObj);
-        console.log(newCreateJobObj);
     }
 
     const handleSubmit = async (event: any) => {
@@ -90,7 +75,6 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
             const hostname = 'http://' + window.location.host;
             if (Object.keys(createJobObject).includes('id')) {
                 const response = await api.instance.patch(`${hostname}${endpoints.createJobs}`, postObj);
-                console.log('patch');
             } else {
                 const response = await api.instance.post(`${hostname}${endpoints.createJobs}`, postObj);
             }
@@ -113,8 +97,8 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                 onChange={e => onchangeInput(e, 'jobTitle')}
                                 required
                                 type="text"
-                                placeholder="Web application"
-                                defaultValue="Web application"
+                                placeholder={createJobObject.jobTitle}
+                                defaultValue={createJobObject.jobTitle}
                             />
                             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                         </Form.Group>
@@ -127,8 +111,8 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                 as="textarea"
                                 required
                                 type="text"
-                                placeholder="This web application requires ..."
-                                defaultValue="This web application requires ..."
+                                placeholder={createJobObject.jobDescription}
+                                defaultValue={createJobObject.jobDescription}
                             />
                             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                         </Form.Group>
@@ -164,14 +148,18 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                     inputMode="numeric"
                                     type="number"
                                     aria-label="Initial"
-                                    placeholder="3000" />
+                                    placeholder={`${createJobObject.initialSalaryRange}`}
+                                    defaultValue={createJobObject.initialSalaryRange}
+                                />
                                 <Form.Control
                                     onChange={e => onchangeInput(e, 'finalSalaryRange')}
                                     pattern="[0-9]*"
                                     inputMode="numeric"
                                     type="number"
                                     aria-label="Final"
-                                    placeholder="5000" />
+                                    placeholder={`${createJobObject.finalSalaryRange}`}
+                                    defaultValue={createJobObject.finalSalaryRange}
+                                />
                                 <Form.Control.Feedback>OK!</Form.Control.Feedback>
                                 <Form.Control.Feedback type="invalid">
                                     Only numbers accepted
@@ -187,6 +175,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                     onChange={e => onchangeInput(e, 'companyName')}
                                     type="text"
                                     placeholder="Company Name"
+                                    defaultValue={createJobObject.companyName}
                                     required
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -202,8 +191,8 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                 onChange={e => onchangeInput(e, 'jobLocation')}
                                 required
                                 type="text"
-                                placeholder="Job Location"
-                                defaultValue="Brazil"
+                                placeholder={createJobObject.jobLocation}
+                                defaultValue={createJobObject.jobLocation}
                             />
                             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                         </Form.Group>

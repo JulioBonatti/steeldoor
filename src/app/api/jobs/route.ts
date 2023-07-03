@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import prisma from '../utils/db'
-import { JobKeys } from './jobs'
-import type { Job } from '@prisma/client'
+import type { JobPost, JobPatch } from '../utils/types'
 
 
 export async function GET() {
@@ -20,7 +19,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
     try {
-        const body = await request.json();
+        const body: JobPost = await request.json();
         // Validate the required properties in the request body
         const requiredFields: string[] = [
             'companyName',
@@ -61,30 +60,51 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
     try {
-        const body: Job = await request.json();
-        // Validate the required properties in the request body
-        const requiredFields: JobKeys = [
-            'id',
-            'companyName',
-            'jobLocation',
-            'jobTitle',
-            'jobDescription',
-            'initialSalaryRange',
-            'finalSalaryRange',
-        ];
-        requiredFields.forEach(field => {
-            if (!(field in body)) {
-                throw new Error(`Missing required field: ${field}`);
-            }
+      const body: JobPatch = await request.json();
+      // Validate the required properties in the request body
+      const requiredFields: string[] = [
+        'id',
+        'companyName',
+        'jobLocation',
+        'jobTitle',
+        'jobDescription',
+        'initialSalaryRange',
+        'finalSalaryRange',
+        'skillIds',
+      ];
+      requiredFields.forEach((field) => {
+        if (!(field in body)) {
+          throw new Error(`Missing required field: ${field}`);
+        }
+      });
+  
+      const { skillIds, ...jobData } = body;
+  
+      const job = await prisma.job.update({
+        where: { id: body.id },
+        data: jobData,
+      });
+  
+      // Deleting JobSkill relation
+      await prisma.jobSkill.deleteMany({
+        where: { jobId: body.id },
+      });
+      
+      //Updating jobskills relation
+      const newJobSkills = skillIds.map((skillId) =>
+        prisma.jobSkill.create({
+          data: {
+            jobId: body.id,
+            skillId,
+          },
         })
-
-        const job = await prisma.job.update({
-            where: { id: body.id },
-            data: body,
-        })
-
-        return NextResponse.json(job, { status: 201 });
+      );
+  
+      await prisma.$transaction(newJobSkills);
+  
+      return NextResponse.json(job, { status: 201 });
     } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 400 });
+      return NextResponse.json({ error: error.message }, { status: 400 });
     }
-}
+  }
+  

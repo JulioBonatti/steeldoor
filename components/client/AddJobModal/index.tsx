@@ -1,18 +1,13 @@
 "use client"
 import './styles.css';
-import type { Skill } from '@prisma/client'
 import { useState } from 'react';
-import { endpoints } from '../../utils/endpoints';
 import Modal from 'react-bootstrap/Modal';
+import type { Skill } from '../../../src/app/api/utils/types';
 import JobCreateUpdateForm from '../JobCreateUpdateForm';
-import API from '../../../src/app/api/utils/api';
-import axios from 'axios';
-
 
 
 type AddJobButtonProps = {
   skills: Skill[],
-
 }
 
 

@@ -24,3 +24,30 @@ export type Job = {
     updatedAt: string,
     jobSkills: JobSkills[]
 }
+
+type JobObj = {
+    id?: string,
+    companyName: string,
+    jobLocation: string,
+    jobTitle: string,
+    jobDescription: string,
+    initialSalaryRange: number,
+    finalSalaryRange: number,
+    skillIds: string[],
+}
+
+export interface JobPost {
+    companyName: string,
+    jobLocation: string,
+    jobTitle: string,
+    jobDescription: string,
+    initialSalaryRange: number,
+    finalSalaryRange: number,
+    createdAt?: string,
+    updatedAt?: string,
+    skillIds: string[]
+}
+
+export interface JobPatch extends JobPost {
+    id: string
+}

@@ -31,8 +31,6 @@ async function deleteJob(id: string) {
 
 export default function JobCard(props: JobCardProps) {
 
-    const title = 'Job Title';
-    const description = 'asdjasuhdiusadfhnasdiudfhas iudnasuiyhdioaushdiua yhsgddfiuoaSHDIU AShdo iuASHDUIOYAGHSdiuoyhAGHSDOIU YahsdoiuuHASDO IUAHsdoiuhASOIDUHasoiudhASKJ UIHYDGBiauysghdIAUSYG DOi uahyshdi uyAGS D U OHYagsdiuyBA SODIUYG H'
     const skills = props.job.jobSkills.map(jobS => jobS.skill.skillName);
 
     const openUpdater = () => {
@@ -63,7 +61,7 @@ export default function JobCard(props: JobCardProps) {
             <div className="job-card-section" >
                 <div className="job-card-description-section">
                     <label style={{ fontSize: '14px', marginBottom: '2px' }}>Description:</label>
-                    <div className="description-container">{description}</div>
+                    <div className="description-container">{props.job.jobDescription}</div>
                 </div>
                 <div className='job-card-dscr-salary-container' >
                     <label style={{ fontSize: '20px', marginBottom: '2px', fontWeight: 600 }}>Salary Range</label>
