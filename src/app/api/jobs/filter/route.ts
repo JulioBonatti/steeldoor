@@ -1,23 +1,55 @@
-import { NextResponse, NextRequest } from 'next/server'
-import type { Skill } from '@prisma/client'
-import prisma from '../../utils/db'
+import { NextRequest, NextResponse } from 'next/server';
+import { PrismaClient, Prisma } from '@prisma/client';
 
+const prisma = new PrismaClient();
 
-async function getFilteredJobs(params) {
-    const { companyName, finalSalaryRange, initialSalaryRange, jobLocation, skills } = params;
+export async function POST(request: NextRequest) {
+    const { jobFilter, skillsFilter } = await request.json();
+    try {
+        const jobIds = await getJobIdsWithSkills(skillsFilter);
+        const filteredJobs = await filterJobs(jobIds, jobFilter);
 
-    const filter = {
-        companyName,
-        finalSalaryRange,
-        initialSalaryRange,
-        jobLocation,
-        jobSkills: {
-            some: {
-                skill: {
-                    skillName: { in: skills.map(skill => skill.skillName) },
+        return NextResponse.json(filteredJobs, { status: 200 });
+    } catch (error) {
+        console.error('Error:', error);
+        return NextResponse.json({ error: 'Error filtering jobs' }, { status: 500 });
+    }
+}
+
+async function getJobIdsWithSkills(skillsFilter) {
+    const skillIds = skillsFilter.map(skill => skill.id);
+
+    try {
+        const jobIds = await prisma.jobSkill.findMany({
+            where: {
+                skillId: {
+                    in: skillIds,
                 },
             },
+            distinct: ['jobId'],
+            select: {
+                jobId: true,
+            },
+        });
+
+        return jobIds.map(job => job.jobId);
+    } catch (error) {
+        console.error('Error retrieving job IDs with skills:', error);
+        throw error;
+    }
+}
+
+async function filterJobs(jobIds, jobFilter) {
+    const { companyName, finalSalaryRange, initialSalaryRange, jobLocation } = jobFilter;
+
+    const filter = {
+        id: {
+            in: jobIds,
         },
+        ...(companyName && { companyName }),
+        ...(finalSalaryRange && { finalSalaryRange }),
+        ...(initialSalaryRange && { initialSalaryRange }),
+        ...(jobLocation && { jobLocation }),
     };
 
     try {
@@ -30,43 +62,9 @@ async function getFilteredJobs(params) {
 
         return jobs;
     } catch (error) {
-        console.error('Error retrieving filtered jobs:', error);
+        console.error('Error filtering jobs:', error);
         throw error;
     } finally {
         await prisma.$disconnect();
     }
 }
-
-export async function POST(request: Request) {
-    try {
-        const body: JobPost = await request.json();
-        console.log(body)       
-        
-
-        return NextResponse.json(job, { status: 201 });
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 400 });
-    }
-}
-
-export async function GET(req: NextRequest) {
-    const { searchParams } = new URL(req.url);
-    const possibleParams = ['companyName', 'finalSalaryRange', 'initialSalaryRange', 'jobLocation', 'skills']
-    const params = {}
-    possibleParams.forEach(param => {
-        const p = searchParams.get(param)
-        if (p != '' && p !== undefined) {
-            params[param] = p
-        }
-    })
-    console.log(params)
-    try {
-        // const filteredJobs = await getFilteredJobs(params);
-        return NextResponse.json('', { status: 200 });
-    } catch (error) {
-        console.error('Error:', error);
-        return NextResponse.json({ error: 'Error retrieving filtered jobs' }, { status: 500 });
-    }
-}
-
-

@@ -60,19 +60,18 @@ export default function ClientJobFilter() {
 
     const getJobs = () => {
         const hostname = 'http://' + window.location.host;
-        const response = api.instance.get(`${hostname}${endpoints.getJobsFiltered}`,
-            {
-                params: { ...filterParams, skills: selectedSkills },
-                paramsSerializer: params => {
-                    return qs.stringify(params)
-                }
-            })
+        console.log(filterParams);
+        const postObj = {
+            jobFilter: filterParams,
+            skillsFilter: selectedSkills
+        }
+        const response = api.instance.post(`${hostname}${endpoints.getJobsFiltered}`,
+        postObj)
         setResp(response)
     }
 
     return (
         <div>
-
             <div className='seeker-filter-container' >
                 <Form.Group controlId="jobDescription">
                     <Form.Label>Company Name</Form.Label>
