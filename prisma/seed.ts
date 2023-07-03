@@ -19,7 +19,6 @@ async function seedSkills() {
         update: {},
         create: skill
       });
-      console.log(`Skill '${skill.skillName}' seeded successfully`);
     }
   } catch (error) {
     console.error('Error seeding skills:', error);
@@ -44,7 +43,6 @@ async function seedUser() {
       update: {},
       create: userToSeed
     });
-    console.log(`User '${userToSeed.fullName}' seeded successfully`);
   } catch (error) {
     console.error('Error seeding user:', error);
   } finally {

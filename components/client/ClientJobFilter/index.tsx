@@ -62,7 +62,6 @@ export default function ClientJobFilter(props: ClientJobFilterProps) {
             jobFilter: filterParams,
             skillsFilter: selectedSkills
         }
-        console.log('postObj', postObj)
         const response = await api.instance.post(
             `${hostname}${endpoints.getJobsFiltered}`,
             postObj)

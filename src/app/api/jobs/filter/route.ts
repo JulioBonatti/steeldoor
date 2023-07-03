@@ -17,7 +17,6 @@ export async function POST(request: NextRequest) {
     const jobFilterStr = JSON.stringify(jobFilter)
     if (skillsFilter.length === 0 && compareInitial === jobFilterStr) {
         const filteredJobs = await returnAllJobs()
-        console.log(filteredJobs)
         return NextResponse.json(filteredJobs, { status: 200 });
     } else { // if there is actually a real filter
         try {

@@ -43,7 +43,6 @@ export default function JobCard(props: JobCardProps) {
         const hostname = 'http://' + window.location.host;
         const applicationObj = { jobId: props.job.id, userId: userId }
         const response = await api.instance.post(`${hostname}${endpoints.jobApplication}`, applicationObj);
-        console.log('Applied')
     }
 
     const AdminButtons = () => {
