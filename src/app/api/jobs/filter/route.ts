@@ -56,7 +56,9 @@ async function filterJobs(jobIds, jobFilter) {
         const jobs = await prisma.job.findMany({
             where: filter,
             include: {
-                jobSkills: true,
+                jobSkills: {
+                    include: {skill: true}
+                },
             },
         });
 

@@ -8,10 +8,10 @@ import './styles.css';
 
 type JobCardProps = {
     job: Job,
-    showHandler: () => void,
+    showHandler?: () => void,
     appiedUsers?: AppliedUser[],
     admin?: boolean,
-    setJobHandler: any
+    setJobHandler?: any
 }
 
 const api = new API();

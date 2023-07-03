@@ -12,8 +12,10 @@ import './styles.css';
 var qs = require('qs');
 const api = new API();
 
-
-export default function ClientJobFilter() {
+type ClientJobFilterProps = {
+    setFilteredJobs: any
+}
+export default function ClientJobFilter(props: ClientJobFilterProps) {
     const initialFilterState = {
         companyName: '',
         jobLocation: '',
@@ -23,17 +25,12 @@ export default function ClientJobFilter() {
     const [selectedSkills, setSkillList] = useState([] as Skill[]);
     const [skills, setSkills] = useState([] as Skill[]);
     const [filterParams, setFilterParams] = useState(initialFilterState);
-    const [resp, setResp] = useState({});
-
 
     async function fetchData() {
         const hostname = 'http://' + window.location.host;
         const skills: Skill[] = (await api.instance.get(`${hostname}${endpoints.getSkills}`)).data;
         setSkills(skills);
     }
-    // console.log('filter', filterParams)
-    // console.log('skilss', selectedSkills)
-    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', resp);
     useEffect(() => {
         fetchData();
     }, []);
@@ -58,16 +55,17 @@ export default function ClientJobFilter() {
         setFilterParams(newCreateJobObj);
     }
 
-    const getJobs = () => {
+    const getJobs = async () => {
         const hostname = 'http://' + window.location.host;
-        console.log(filterParams);
         const postObj = {
             jobFilter: filterParams,
             skillsFilter: selectedSkills
         }
-        const response = api.instance.post(`${hostname}${endpoints.getJobsFiltered}`,
-        postObj)
-        setResp(response)
+        const response = await api.instance.post(
+            `${hostname}${endpoints.getJobsFiltered}`,
+            postObj)
+        console.log(response.data);
+        props.setFilteredJobs(response.data)
     }
 
     return (

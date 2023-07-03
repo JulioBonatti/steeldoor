@@ -11,9 +11,9 @@ import JobCard from '../JobCard';
 
 type jobListProps = {
     skills: Skill[],
-    jobs: Job[]
+    jobs: Job[],
+    admin?: boolean
 }
-
 
 export default function JobList(props: jobListProps) {
 
@@ -22,12 +22,27 @@ export default function JobList(props: jobListProps) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const EditModal = () => {
+        if (props.admin) {
+            return (
+                <Modal show={show} onHide={handleClose} dialogClassName="modal-90w" >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Update Oportunity</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <JobCreateUpdateForm skills={props.skills} closeHandler={handleClose} jobToEdit={jobToEdit} />
+                    </Modal.Body>
+                </Modal>
+            )
+        } else { return null }
+    }
+
     return (
         <>
             <div style={{ paddingBottom: '4.2rem' }} className='page-container' >
                 {props.jobs.map(job => {
                     return (
-                        <JobCard showHandler={handleShow} admin={true} key={`(${job.createdAt})`} job={job} setJobHandler={setJobToEdit} />
+                        <JobCard showHandler={handleShow} admin={props.admin} key={`(${job.createdAt})`} job={job} setJobHandler={setJobToEdit} />
                     )
                 })
                 }
@@ -35,15 +50,7 @@ export default function JobList(props: jobListProps) {
             <button className="job-modal-button" onClick={handleShow}>
                 +
             </button>
-
-            <Modal show={show} onHide={handleClose} dialogClassName="modal-90w" >
-                <Modal.Header closeButton>
-                    <Modal.Title>Update Oportunity</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <JobCreateUpdateForm skills={props.skills} closeHandler={handleClose} jobToEdit={jobToEdit} />
-                </Modal.Body>
-            </Modal>
+            <EditModal />
         </>
     );
 }

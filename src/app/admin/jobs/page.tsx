@@ -25,7 +25,7 @@ export default async function AdminDashboard() {
   return (
     <main style={{ padding: '0px 20px', background: '#151515' }} >
       <BelowNavDivider />
-      <JobList jobs={jobs} skills={skills} />
+      <JobList jobs={jobs} skills={skills} admin={true} />
       <UserIndicator admin={true} />
       <AddJobButton skills={skills} />
     </main>
