@@ -98,7 +98,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                 required
                                 type="text"
                                 placeholder={createJobObject.jobTitle}
-                                defaultValue={createJobObject.jobTitle}
+                                defaultValue=""
                             />
                             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                         </Form.Group>
@@ -112,7 +112,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                 required
                                 type="text"
                                 placeholder={createJobObject.jobDescription}
-                                defaultValue={createJobObject.jobDescription}
+                                defaultValue=""
                             />
                             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                         </Form.Group>
@@ -149,7 +149,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                     type="number"
                                     aria-label="Initial"
                                     placeholder={`${createJobObject.initialSalaryRange}`}
-                                    defaultValue={createJobObject.initialSalaryRange}
+                                    defaultValue={0}
                                 />
                                 <Form.Control
                                     onChange={e => onchangeInput(e, 'finalSalaryRange')}
@@ -158,7 +158,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                     type="number"
                                     aria-label="Final"
                                     placeholder={`${createJobObject.finalSalaryRange}`}
-                                    defaultValue={createJobObject.finalSalaryRange}
+                                    defaultValue=""
                                 />
                                 <Form.Control.Feedback>OK!</Form.Control.Feedback>
                                 <Form.Control.Feedback type="invalid">
@@ -175,7 +175,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                     onChange={e => onchangeInput(e, 'companyName')}
                                     type="text"
                                     placeholder="Company Name"
-                                    defaultValue={createJobObject.companyName}
+                                    defaultValue=""
                                     required
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -192,7 +192,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                 required
                                 type="text"
                                 placeholder={createJobObject.jobLocation}
-                                defaultValue={createJobObject.jobLocation}
+                                defaultValue=""
                             />
                             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                         </Form.Group>

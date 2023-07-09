@@ -6,14 +6,7 @@
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 21, 21, 21;
   --background-end-rgb: 21, 21, 21;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 21, 21, 21;
-    --background-end-rgb: 21, 21, 21;
-  }
+  --mid-dark: #252525
 }
 
 body {
@@ -24,4 +17,21 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+main {
+  background: #111111;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.homepage {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 4.2rem);
 }

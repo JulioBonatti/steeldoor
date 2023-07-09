@@ -1,9 +1,21 @@
+"use client"
 import './styles.css';
+import { redirectToPath } from '../../utils/endpoints';
+import UserIndicator from '../UserIndicator';
 
-export default function SteelDoorNav() {
+
+type SteelDoorNavProps = {
+  admin?: boolean,
+}
+
+export default function SteelDoorNav(props: SteelDoorNavProps) {
   return (
     <nav className="steel-door-nav">
-        Steel Door
+      <div onClick={() => redirectToPath("/")} className="steel-door" >
+        <label className="grow" >Steel Door</label>
+        <label className="tip-label">Home</label>
+      </div>
+      {props.admin ? <UserIndicator admin={props.admin} /> : <></>}
     </nav>
   )
 }

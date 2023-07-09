@@ -2,10 +2,10 @@ import type { Skill } from '@prisma/client'
 import type { Job } from '../../api/utils/types'
 import { endpoints } from '../../../../components/utils/endpoints';
 import BelowNavDivider from '../../../../components/server/BelowNavDivider';
-import UserIndicator from '../../../../components/server/UserIndicator';
 import AddJobButton from '../../../../components/client/AddJobModal';
 import JobList from '../../../../components/client/JobList';
 import API from '../../api/utils/api';
+import SteelDoorNav from '../../../../components/server/SteelDoorNav';
 import './styles.css'
 
 
@@ -23,10 +23,10 @@ export default async function AdminDashboard() {
   const jobs = data.jobs;
   const skills = data.skills;
   return (
-    <main style={{ padding: '0px 20px', background: '#151515' }} >
+    <main style={{ background: '#151515' }} >
+      <SteelDoorNav admin={true} />
       <BelowNavDivider />
       <JobList jobs={jobs} skills={skills} admin={true} />
-      <UserIndicator admin={true} />
       <AddJobButton skills={skills} />
     </main>
   )

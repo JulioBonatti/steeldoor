@@ -1,27 +1,38 @@
 .initial-card {
-    border: 1px solid #868686;
+    /* border: 1px solid #868686; */
     width: 19rem;
     border-radius: 2rem;
-    padding-top: 20px;
-    background: #444444;
+    background: #1b1b1b;
     overflow: hidden;
-    margin: 20px
+    width: 30vw;
+    /* margin: 3% 10% auto 10%; */
+    /* margin-left: 10%; */
+    height: 43vh;
+    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.35);
+    transition:  box-shadow 0.4s;
 }
 
 .initial-card:hover {
     cursor: pointer;
+    box-shadow: 0px 0px 15px rgba(13, 110, 253, 0.25);
+
 }
 
 .initial-card-title {
-    border-bottom: 1px solid #868686;
-    padding: 0px 30px;
-    font-size: 2rem;
+    /* border-bottom: 1px solid #868686; */
+    height: 14vh;
+    padding: 3vh 3vh;
+    font-size: 6.3vh;
+    color: #1b1b1b;
     background: #444444;
 }
 
 .initial-card-body {
     width: 100%;
-    padding: 20px 30px;
+    padding: 40px 30px;
     text-align: center;
+    font-size: 2.7vh;
+    color: #b9b9b9; 
     background: linear-gradient(#313131, #1b1b1b, #1b1b1b, #1b1b1b, #1b1b1b, #1b1b1b, #1b1b1b);
 }
+

@@ -1,6 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './globals.css'
-import SteelDoorNav from '../../components/server/SteelDoorNav';
 import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -18,8 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en" data-bs-theme="dark" >
       <body className={inter.className}>
-        <SteelDoorNav />
-        {children}
+          {children}
       </body>
     </html>
   )
