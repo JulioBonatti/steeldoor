@@ -2,7 +2,7 @@
 import './styles.css';
 import { useState } from 'react';
 import { endpoints } from '../../utils/endpoints';
-import type { Job, JobObj, Skill } from '../../../src/app/api/utils/types';
+import type { Job, JobObj, Skill, JobSkills } from '../../../src/app/api/utils/types';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -15,8 +15,9 @@ import API from '../../../src/app/api/utils/api';
 type JobCreateUpdateFormProps = {
     skills: Skill[],
     closeHandler: any,
-    jobToEdit: Job | boolean,
-    edit?: boolean
+    jobToEdit?: Job,
+    edit?: boolean,
+    prepareToast: (msg: string, type: "success" | "danger" | "warning" | "dark") => void
 }
 
 const api = new API();
@@ -33,7 +34,9 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
         jobLocation: 'Brazil'
     } as JobObj;
     let initialSkill = [] as Skill[];
-    if (typeof props.jobToEdit != 'boolean') {
+    console.log(props.jobToEdit)
+    if (props.jobToEdit !== undefined) {  // Check if 'props.jobToEdit' is not undefined
+        const jobToEdit = props.jobToEdit as Job;  // Type assertion for 'props.jobToEdit'
         initialObject.jobTitle = props.jobToEdit.jobTitle;
         initialObject.jobDescription = props.jobToEdit.jobDescription;
         initialObject.initialSalaryRange = props.jobToEdit.initialSalaryRange;
@@ -43,17 +46,20 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
         initialObject.skillIds = props.jobToEdit.jobSkills.map(jobS => jobS.skill.id);
         initialObject.id = props.jobToEdit.id;
         initialSkill = props.jobToEdit.jobSkills.map(jobS => jobS.skill);
+        initialSkill = jobToEdit.jobSkills?.map((jobS: JobSkills) => jobS.skill) || [];
     }
     const [validated, setValidated] = useState(false);
     const [selectedSkills, setSkillList] = useState(initialSkill as Skill[])
     const [createJobObject, setCreateJobObject] = useState(initialObject as JobObj)
     const addSkill = (el: any) => {
-        const selected: Skill = JSON.parse(el.target.value);
-        const assertion = selectedSkills.map(slected => slected.id == selected.id).includes(true)
-        if (!assertion) {
-            const skillList = structuredClone(selectedSkills)
-            skillList.push(selected);
-            setSkillList(skillList);
+        if (el.target.value !== 'Choose Skill') {
+            const selected: Skill = JSON.parse(el.target.value);
+            const assertion = selectedSkills.map(slected => slected.id == selected.id).includes(true)
+            if (!assertion) {
+                const skillList = structuredClone(selectedSkills)
+                skillList.push(selected);
+                setSkillList(skillList);
+            }
         }
     }
 
@@ -79,7 +85,8 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                 const response = await api.instance.post(`${hostname}${endpoints.createJobs}`, postObj);
             }
             props.closeHandler()
-            window.location.reload();
+            props.prepareToast(`Created Job: ${createJobObject.jobTitle}`, 'success')
+            // window.location.reload();
             // TODO: toast to indicate creation
         } catch (error) {
             console.error(error);
@@ -98,7 +105,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                 required
                                 type="text"
                                 placeholder={createJobObject.jobTitle}
-                                defaultValue=""
+                                defaultValue={props.jobToEdit ? props.jobToEdit.jobTitle : ''}
                             />
                             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                         </Form.Group>
@@ -112,7 +119,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                 required
                                 type="text"
                                 placeholder={createJobObject.jobDescription}
-                                defaultValue=""
+                                defaultValue={props.jobToEdit ? props.jobToEdit.jobDescription : ''}
                             />
                             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                         </Form.Group>
@@ -120,7 +127,8 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                     <Row>
                         <Form.Group controlId="selectedSkill">
                             <Form.Label>Skills</Form.Label>
-                            <Form.Select onSelect={addSkill} onChange={addSkill}>
+                            <Form.Select onSelect={addSkill} onChange={addSkill} placeholder='Choose Skill'>
+                                <option key="disabled">Choose Skill</option>
                                 {props.skills.map(skill => {
                                     return (
                                         <option key={skill.skillName} value={JSON.stringify(skill)}>{skill.skillName}</option>
@@ -149,7 +157,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                     type="number"
                                     aria-label="Initial"
                                     placeholder={`${createJobObject.initialSalaryRange}`}
-                                    defaultValue={0}
+                                    defaultValue={props.jobToEdit ? props.jobToEdit.initialSalaryRange : 0}
                                 />
                                 <Form.Control
                                     onChange={e => onchangeInput(e, 'finalSalaryRange')}
@@ -158,7 +166,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                     type="number"
                                     aria-label="Final"
                                     placeholder={`${createJobObject.finalSalaryRange}`}
-                                    defaultValue=""
+                                    defaultValue={props.jobToEdit ? props.jobToEdit.finalSalaryRange : 5000}
                                 />
                                 <Form.Control.Feedback>OK!</Form.Control.Feedback>
                                 <Form.Control.Feedback type="invalid">
@@ -175,7 +183,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                     onChange={e => onchangeInput(e, 'companyName')}
                                     type="text"
                                     placeholder="Company Name"
-                                    defaultValue=""
+                                    defaultValue={props.jobToEdit ? props.jobToEdit.companyName : ''}
                                     required
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -192,7 +200,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                 required
                                 type="text"
                                 placeholder={createJobObject.jobLocation}
-                                defaultValue=""
+                                defaultValue={props.jobToEdit ? props.jobToEdit.jobLocation : ''}
                             />
                             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                         </Form.Group>

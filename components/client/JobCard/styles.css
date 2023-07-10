@@ -16,16 +16,39 @@
     flex-direction: row;
 }
 
+.job-card-info-container {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr;
+}
+
 .job-card-dscr-salary-container {
     display: flex;
     flex-direction: column;
-    /* width: 100%; */
-    margin-left: 5rem;
+    margin-left: 0px;
 }
 
-.job-label {
-    margin-left: auto;
-    margin-right: 20px;
+.job-card-dscr-salary-container-values {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    /* justify-items: center; */
+}
+
+.job-card-skills-container {
+    display: grid;
+    grid-template-columns: 4fr 2fr;
+}
+
+
+.job-card-apu-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.job-img {
+    margin: 5px 20px 0px 20px;
+    width: 1.2rem;
+    height: 1.2rem;
+    color: #e9e9e9;
 }
 
 .job-label-remove {
@@ -43,7 +66,7 @@
 .job-card-description-section {
     display: flex;
     flex-direction: column;
-    width: 50rem;
+    padding-right: 20px;
 }
 
 .description-container {

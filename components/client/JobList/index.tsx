@@ -1,12 +1,11 @@
 "use client"
 import './styles.css';
-import type { Skill } from '@prisma/client'
 import { useState } from 'react';
-import type { Job } from '../../../src/app/api/utils/types';
+import type { Job, Skill } from '../../../src/app/api/utils/types';
 import Modal from 'react-bootstrap/Modal';
 import JobCreateUpdateForm from '../JobCreateUpdateForm';
 import JobCard from '../JobCard';
-
+import GeneralToast from '../GeneralToast';
 
 
 type jobListProps = {
@@ -17,25 +16,37 @@ type jobListProps = {
 
 export default function JobList(props: jobListProps) {
 
-    const [show, setShow] = useState(false);
-    const [jobToEdit, setJobToEdit] = useState(false)
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [showModal, setShowModal] = useState(false); // Modal
+
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+    const [toastType, setToastType] = useState('dark' as "success" | "danger" | "warning" | "dark");
+
+    const [jobToEdit, setJobToEdit] = useState({} as Job | {})
+    const handleClose = () => setShowModal(false);
+    const handleShow = () => setShowModal(true);
+
+    const prepareToast = (msg: string, type: "success" | "danger" | "warning" | "dark") => {
+        setToastMessage(msg)
+        setToastType(type)
+        setShowToast(true)
+    };
 
     const EditModal = () => {
         if (props.admin) {
             return (
-                <Modal show={show} onHide={handleClose} dialogClassName="modal-90w" >
+                <Modal show={showModal} onHide={handleClose} dialogClassName="modal-90w" >
                     <Modal.Header closeButton>
                         <Modal.Title>Update Oportunity</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <JobCreateUpdateForm skills={props.skills} closeHandler={handleClose} jobToEdit={jobToEdit} />
+                        <JobCreateUpdateForm prepareToast={prepareToast} skills={props.skills} closeHandler={handleClose} jobToEdit={jobToEdit} />
                     </Modal.Body>
                 </Modal>
             )
         } else { return null }
     }
+    console.log(showToast)
 
     return (
         <>
@@ -51,6 +62,7 @@ export default function JobList(props: jobListProps) {
                 +
             </button>
             <EditModal />
+            <GeneralToast message={toastMessage} show={showToast} setShow={setShowToast} type={toastType} />
         </>
     );
 }

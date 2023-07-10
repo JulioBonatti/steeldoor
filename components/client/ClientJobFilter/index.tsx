@@ -85,7 +85,7 @@ export default function ClientJobFilter(props: ClientJobFilterProps) {
                                 />
                                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                             </Form.Group>
-                            <Form.Group controlId="jobDescription">
+                            <Form.Group controlId="jobLocation">
                                 <Form.Label>Job location</Form.Label>
                                 <Form.Control
                                     onChange={e => onchangeInput(e, 'jobLocation')}
@@ -129,7 +129,7 @@ export default function ClientJobFilter(props: ClientJobFilterProps) {
                             <div>
                                 <Form.Group controlId="selectedSkill">
                                     <Form.Label>Skills</Form.Label>
-                                    <Form.Select onSelect={addSkill} onChange={addSkill}>
+                                    <Form.Select onSelect={addSkill} onChange={addSkill} placeholder='Choose Skill'>
                                         {skills.map((skill) => (
                                             <option key={skill.skillName} value={JSON.stringify(skill)}>{skill.skillName}</option>
                                         ))}
