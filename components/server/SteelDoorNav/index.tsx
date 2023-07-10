@@ -9,7 +9,6 @@ type SteelDoorNavProps = {
 }
 
 export default function SteelDoorNav(props: SteelDoorNavProps) {
-  console.log(props.admin)
   return (
     <nav className="steel-door-nav">
       <div onClick={() => redirectToPath("/")} className="steel-door" >

@@ -42,10 +42,24 @@ export const validate: Validate = (obj: JobObj) => {
             tType
         }
     }
+    if (isNaN(obj.initialSalaryRange)) {
+        return {
+            valid,
+            msg: 'Input a number please',
+            tType
+        }
+    }
     if (obj.initialSalaryRange < 0) {
         return {
             valid,
             msg: 'Value must be positive',
+            tType
+        }
+    }
+    if (isNaN(obj.finalSalaryRange)) {
+        return {
+            valid,
+            msg: 'Input a number please',
             tType
         }
     }

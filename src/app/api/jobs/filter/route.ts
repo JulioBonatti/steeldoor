@@ -92,6 +92,7 @@ async function filterJobs(jobIds, jobFilter) {
                 jobSkills: {
                     include: { skill: true }
                 },
+                appliedUsers: true,
             },
         });
 

@@ -52,6 +52,8 @@ export default function JobCard(props: JobCardProps) {
         const hostname = 'http://' + window.location.host;
         const applicationObj = { jobId: props.job.id, userId: userId }
         const response = await api.instance.post(`${hostname}${endpoints.jobApplication}`, applicationObj);
+        props.prepareToast && props.prepareToast('Applied to Job!', 'success')
+        props.fetch && props.fetch()
     }
 
     const editTootip = (<Tooltip placement='top' >Edit Job</Tooltip>)

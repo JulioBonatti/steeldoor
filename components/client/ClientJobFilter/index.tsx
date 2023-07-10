@@ -140,17 +140,18 @@ export default function ClientJobFilter(props: ClientJobFilterProps) {
                                 <Form.Group controlId="selectedSkill">
                                     <Form.Label>Skills</Form.Label>
                                     <Form.Select onSelect={addSkill} onChange={addSkill} placeholder='Choose Skill'>
+                                        <option key="disabled">Choose Skill</option>
                                         {skills.map((skill) => (
                                             <option key={skill.skillName} value={JSON.stringify(skill)}>{skill.skillName}</option>
                                         ))}
                                     </Form.Select>
                                 </Form.Group>
-                                <div style={{ marginTop: '10px'}}>
+                                <div style={{ marginTop: '10px' }}>
                                     <SkillsBadges skills={skills} selectedSkills={selectedSkills} setHandler={setSkillList} />
                                     <Button
                                         onClick={getJobs}
                                         variant="primary"
-                                        style={{ float: 'right', marginLeft: 'auto', width: '8rem',marginTop: '-25px' }}
+                                        style={{ float: 'right', marginLeft: 'auto', width: '8rem', marginTop: '-25px' }}
                                     >Find Jobs</Button>
                                 </div>
                             </div>
