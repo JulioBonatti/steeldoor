@@ -15,24 +15,29 @@ type JobCardProps = {
     admin?: boolean,
     showHandler?: () => void | undefined,
     setJobHandler?: (job: Job) => void | undefined,
+    fetch?: () => void,
+    prepareToast?: (msg: string, type: "success" | "danger" | "warning" | "dark") => void
 }
 
 const api = new API();
 
-async function deleteJob(id: string) {
-    try {
-        const hostname = 'http://' + window.location.host;
-        const response = await api.instance.delete(`${hostname}${endpoints.createJobs}/${id}`);
-        window.location.reload();
-        // TODO: toast to indicate deletion
-    } catch (error) {
-        console.error('Error creating job:', error);
-        throw error;
-    }
-}
 
 
 export default function JobCard(props: JobCardProps) {
+
+    async function deleteJob(id: string) {
+        try {
+            const hostname = 'http://' + window.location.host;
+            const response = await api.instance.delete(`${hostname}${endpoints.createJobs}/${id}`);
+            if (response.status < 250) {
+                props.prepareToast && props.prepareToast(`Deleted ${props.job.jobTitle}`, 'success')
+                props.fetch && props.fetch()
+            }
+        } catch (error) {
+            console.error('Error creating job:', error);
+            throw error;
+        }
+    }
 
     const skills = props.job.jobSkills.map(jobS => jobS.skill.skillName);
 
@@ -104,7 +109,6 @@ export default function JobCard(props: JobCardProps) {
             return (<></>)
         }
     }
-    console.log(!props.admin, props.job.appliedUsers?.length)
 
     return (
         <div className="job-card">

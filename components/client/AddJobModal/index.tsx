@@ -26,7 +26,7 @@ export default function AddJobButton(props: AddJobButtonProps) {
   };
 
   const [show, setShow] = useState(false);
-  const handleClose = () => { setShow(false); props.fetch(); }
+  const handleClose = () => setShow(false)
   const handleShow = () => setShow(true);
 
   return (
@@ -35,12 +35,12 @@ export default function AddJobButton(props: AddJobButtonProps) {
         +
       </button>
 
-      <Modal show={show} onHide={handleClose} dialogClassName="modal-90w" >
-        <Modal.Header closeButton>
-          <Modal.Title>Create Oportunity</Modal.Title>
+      <Modal show={show} onHide={handleClose} dialogClassName="modal-90w" style={{zIndex: 900}}>
+        <Modal.Header closeButton style={{zIndex: 902}}>
+          <Modal.Title >Create Oportunity</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <JobCreateUpdateForm skills={props.skills} closeHandler={handleClose} prepareToast={prepareToast} />
+        <Modal.Body style={{zIndex: 901}}>
+          <JobCreateUpdateForm skills={props.skills} closeHandler={handleClose} prepareToast={prepareToast} fetch={props.fetch}/>
         </Modal.Body>
       </Modal>
       <GeneralToast message={toastMessage} show={showToast} setShow={setShowToast} type={toastType} />

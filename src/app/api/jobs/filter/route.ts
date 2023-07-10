@@ -79,10 +79,10 @@ async function filterJobs(jobIds, jobFilter) {
         id: {
             in: jobIds,
         },
-        ...(companyName && { companyName }),
-        ...(finalSalaryRange && { finalSalaryRange }),
-        ...(initialSalaryRange && { initialSalaryRange }),
-        ...(jobLocation && { jobLocation }),
+        ...(companyName && { companyName: { contains: companyName } }),
+        ...(initialSalaryRange && { initialSalaryRange: { gte: initialSalaryRange } }),
+        ...(finalSalaryRange && { finalSalaryRange: { lte: finalSalaryRange } }),
+        ...(jobLocation && { jobLocation: { contains: jobLocation } }),
     };
 
     try {

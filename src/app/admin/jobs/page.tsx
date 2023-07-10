@@ -26,14 +26,13 @@ export default function AdminDashboard() {
   }
 
   useEffect(() => { fetchData() },[]);
-  console.log(jobs)
   return (
     <main style={{ background: '#151515' }} >
       <SteelDoorNav admin={true} />
       <div className="pr-5 pl-5" >
         <BelowNavDivider />
       </div>
-      {jobs && skills && <JobList jobs={jobs} skills={skills} admin={true} />}
+      {jobs && skills && <JobList jobs={jobs} skills={skills} admin={true} fetch={fetchData}/>}
       {jobs && skills && <AddJobButton skills={skills} fetch={fetchData} />}
     </main>
   )

@@ -11,7 +11,8 @@ import GeneralToast from '../GeneralToast';
 type jobListProps = {
     skills: Skill[],
     jobs: Job[],
-    admin?: boolean
+    admin?: boolean,
+    fetch: () => void
 }
 
 export default function JobList(props: jobListProps) {
@@ -40,20 +41,27 @@ export default function JobList(props: jobListProps) {
                         <Modal.Title>Update Oportunity</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <JobCreateUpdateForm prepareToast={prepareToast} skills={props.skills} closeHandler={handleClose} jobToEdit={jobToEdit} />
+                        <JobCreateUpdateForm prepareToast={prepareToast} skills={props.skills} closeHandler={handleClose} jobToEdit={jobToEdit} fetch={props.fetch} />
                     </Modal.Body>
                 </Modal>
             )
         } else { return null }
     }
-    console.log(showToast)
 
     return (
         <>
             <div style={{ paddingBottom: '4.2rem' }} className='page-container' >
                 {props.jobs.map(job => {
                     return (
-                        <JobCard showHandler={handleShow} admin={props.admin} key={`(${job.createdAt})`} job={job} setJobHandler={setJobToEdit} />
+                        <JobCard
+                            showHandler={handleShow}
+                            admin={props.admin}
+                            key={`(${job.createdAt})`}
+                            job={job}
+                            setJobHandler={setJobToEdit}
+                            fetch={props.fetch}
+                            prepareToast={prepareToast}
+                        />
                     )
                 })
                 }

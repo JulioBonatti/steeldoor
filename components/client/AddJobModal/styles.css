@@ -27,3 +27,7 @@
 	margin-right: auto;
 	margin-left: auto;
 }
+
+.modal-backdrop.show {
+	z-index: 890;
+}

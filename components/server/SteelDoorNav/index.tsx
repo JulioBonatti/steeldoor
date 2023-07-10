@@ -5,17 +5,18 @@ import UserIndicator from '../UserIndicator';
 
 
 type SteelDoorNavProps = {
-  admin?: boolean,
+  admin: boolean,
 }
 
 export default function SteelDoorNav(props: SteelDoorNavProps) {
+  console.log(props.admin)
   return (
     <nav className="steel-door-nav">
       <div onClick={() => redirectToPath("/")} className="steel-door" >
         <label className="grow" >Steel Door</label>
         <label className="tip-label">Home</label>
       </div>
-      {props.admin ? <UserIndicator admin={props.admin} /> : <></>}
+      <UserIndicator admin={props.admin} />
     </nav>
   )
 }

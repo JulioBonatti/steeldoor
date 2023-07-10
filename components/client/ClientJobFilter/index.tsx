@@ -34,6 +34,7 @@ export default function ClientJobFilter(props: ClientJobFilterProps) {
     }
     useEffect(() => {
         fetchData();
+        getJobs()
     }, []);
 
 
@@ -68,65 +69,74 @@ export default function ClientJobFilter(props: ClientJobFilterProps) {
         props.setFilteredJobs(response.data)
     }
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            // Perform the desired action when the "Enter" key is pressed
+            getJobs();
+        }
+    };
+
     return (
         <div>
             <div className='seeker-filter-container' >
-                <Accordion defaultActiveKey="0" style={{ width: '100%' }}>
+                <Accordion style={{ width: '100%' }} onKeyDown={handleKeyDown} flush>
                     <Accordion.Item eventKey="0">
                         <Accordion.Header>Job Filters</Accordion.Header>
                         <Accordion.Body>
-                            <Form.Group controlId="jobDescription">
-                                <Form.Label>Company Name</Form.Label>
-                                <Form.Control
-                                    onChange={e => onchangeInput(e, 'companyName')}
-                                    type="text"
-                                    placeholder=''
-                                    defaultValue=''
-                                />
-                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group controlId="jobLocation">
-                                <Form.Label>Job location</Form.Label>
-                                <Form.Control
-                                    onChange={e => onchangeInput(e, 'jobLocation')}
-                                    type="text"
-                                    placeholder=''
-                                    defaultValue=''
-                                />
-                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group controlId="Salary Range" className="mb-3">
-                                <Form.Label>{'Salary Range'}</Form.Label>
-                                <div >
-                                    <label className='sub-label' >Initial</label>
-                                    <label className='sub-label' style={{ float: 'right' }} >Final</label>
-                                </div>
-                                <InputGroup className="mb-3">
+                            <div className="acordeon-form-grid-3">
+                                <Form.Group controlId="jobDescription">
+                                    <Form.Label style={{ marginBottom: '2rem' }} >Company Name</Form.Label>
                                     <Form.Control
-                                        onChange={e => onchangeInput(e, 'initialSalaryRange')}
-                                        pattern="[0-9]*"
-                                        inputMode="numeric"
-                                        type="number"
-                                        aria-label="Initial"
-                                        placeholder={"3000"}
+                                        onChange={e => onchangeInput(e, 'companyName')}
+                                        type="text"
+                                        placeholder=''
                                         defaultValue=''
                                     />
+                                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group controlId="jobLocation">
+                                    <Form.Label style={{ marginBottom: '2rem' }}>Job location</Form.Label>
                                     <Form.Control
-                                        onChange={e => onchangeInput(e, 'finalSalaryRange')}
-                                        pattern="[0-9]*"
-                                        inputMode="numeric"
-                                        type="number"
-                                        aria-label="Final"
-                                        placeholder={"3000"}
+                                        onChange={e => onchangeInput(e, 'jobLocation')}
+                                        type="text"
+                                        placeholder=''
                                         defaultValue=''
                                     />
-                                    <Form.Control.Feedback>OK!</Form.Control.Feedback>
-                                    <Form.Control.Feedback type="invalid">
-                                        Only numbers accepted
-                                    </Form.Control.Feedback>
-                                </InputGroup>
-                            </Form.Group>
-                            <div>
+                                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group controlId="Salary Range" className="mb-3">
+                                    <Form.Label>{'Salary Range'}</Form.Label>
+                                    <div >
+                                        <label className='sub-label' >Initial</label>
+                                        <label className='sub-label' style={{ float: 'right' }} >Final</label>
+                                    </div>
+                                    <InputGroup >
+                                        <Form.Control
+                                            onChange={e => onchangeInput(e, 'initialSalaryRange')}
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
+                                            type="number"
+                                            aria-label="Initial"
+                                            placeholder={"3000"}
+                                            defaultValue=''
+                                        />
+                                        <Form.Control
+                                            onChange={e => onchangeInput(e, 'finalSalaryRange')}
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
+                                            type="number"
+                                            aria-label="Final"
+                                            placeholder={"3000"}
+                                            defaultValue=''
+                                        />
+                                        <Form.Control.Feedback>OK!</Form.Control.Feedback>
+                                        <Form.Control.Feedback type="invalid">
+                                            Only numbers accepted
+                                        </Form.Control.Feedback>
+                                    </InputGroup>
+                                </Form.Group>
+                            </div>
+                            <div className="acordeon-form-grid-2">
                                 <Form.Group controlId="selectedSkill">
                                     <Form.Label>Skills</Form.Label>
                                     <Form.Select onSelect={addSkill} onChange={addSkill} placeholder='Choose Skill'>
@@ -135,16 +145,18 @@ export default function ClientJobFilter(props: ClientJobFilterProps) {
                                         ))}
                                     </Form.Select>
                                 </Form.Group>
-                                <SkillsBadges skills={skills} selectedSkills={selectedSkills} setHandler={setSkillList} />
+                                <div style={{ marginTop: '10px'}}>
+                                    <SkillsBadges skills={skills} selectedSkills={selectedSkills} setHandler={setSkillList} />
+                                    <Button
+                                        onClick={getJobs}
+                                        variant="primary"
+                                        style={{ float: 'right', marginLeft: 'auto', width: '8rem',marginTop: '-25px' }}
+                                    >Find Jobs</Button>
+                                </div>
                             </div>
                         </Accordion.Body>
                     </Accordion.Item>
                 </Accordion>
-                <Button
-                    onClick={getJobs}
-                    variant="primary"
-                    style={{ float: 'right', width: '8rem'}}
-                >Find Jobs</Button>
             </div>
 
         </div>

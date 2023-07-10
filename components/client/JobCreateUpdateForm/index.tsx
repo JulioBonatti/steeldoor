@@ -1,5 +1,6 @@
 "use client"
 import './styles.css';
+import { validate } from './validation';
 import { useState } from 'react';
 import { endpoints } from '../../utils/endpoints';
 import type { Job, JobObj, Skill, JobSkills } from '../../../src/app/api/utils/types';
@@ -17,26 +18,27 @@ type JobCreateUpdateFormProps = {
     closeHandler: any,
     jobToEdit?: Job,
     edit?: boolean,
-    prepareToast: (msg: string, type: "success" | "danger" | "warning" | "dark") => void
+    prepareToast: (msg: string, type: "success" | "danger" | "warning" | "dark") => void,
+    fetch: () => void
 }
 
 const api = new API();
 
+
+
 export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
     // TODO: this needs refactoring
     let initialObject = {
-        jobTitle: 'Web application',
-        jobDescription: 'This web application requires ...',
+        jobTitle: '',
+        jobDescription: '',
         skillIds: [],
         initialSalaryRange: 3000,
         finalSalaryRange: 5000,
-        companyName: 'Web application',
-        jobLocation: 'Brazil'
+        companyName: '',
+        jobLocation: ''
     } as JobObj;
     let initialSkill = [] as Skill[];
-    console.log(props.jobToEdit)
     if (props.jobToEdit !== undefined) {  // Check if 'props.jobToEdit' is not undefined
-        const jobToEdit = props.jobToEdit as Job;  // Type assertion for 'props.jobToEdit'
         initialObject.jobTitle = props.jobToEdit.jobTitle;
         initialObject.jobDescription = props.jobToEdit.jobDescription;
         initialObject.initialSalaryRange = props.jobToEdit.initialSalaryRange;
@@ -46,7 +48,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
         initialObject.skillIds = props.jobToEdit.jobSkills.map(jobS => jobS.skill.id);
         initialObject.id = props.jobToEdit.id;
         initialSkill = props.jobToEdit.jobSkills.map(jobS => jobS.skill);
-        initialSkill = jobToEdit.jobSkills?.map((jobS: JobSkills) => jobS.skill) || [];
+        initialSkill = props.jobToEdit.jobSkills?.map((jobS: JobSkills) => jobS.skill) || [];
     }
     const [validated, setValidated] = useState(false);
     const [selectedSkills, setSkillList] = useState(initialSkill as Skill[])
@@ -73,21 +75,35 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
     }
 
     const handleSubmit = async (event: any) => {
-        // TODO: Needs to validate salary initial < final
-        // TODO: maybe validade existence of selected skills    
         try {
             let postObj = structuredClone(createJobObject)
             postObj.skillIds = selectedSkills.map(skill => skill.id)
-            const hostname = 'http://' + window.location.host;
-            if (Object.keys(createJobObject).includes('id')) {
-                const response = await api.instance.patch(`${hostname}${endpoints.createJobs}`, postObj);
+            const { valid, msg, tType } = validate(postObj)
+            if (valid) {
+                const hostname = 'http://' + window.location.host;
+                if (Object.keys(createJobObject).includes('id')) {
+                    const response = await api.instance.patch(`${hostname}${endpoints.createJobs}`, postObj);
+                    if (response.status < 250) {
+                        props.prepareToast(`Updated Job: ${createJobObject.jobTitle}`, 'success')
+                        props.closeHandler()
+                        props.fetch()
+                    } else {
+                        props.prepareToast(`Error while creating`, 'danger')
+                    }
+                } else {
+                    const response = await api.instance.post(`${hostname}${endpoints.createJobs}`, postObj);
+                    if (response.status < 250) {
+                        props.prepareToast(`Created Job: ${createJobObject.jobTitle}`, 'success')
+                        props.closeHandler()
+                        props.fetch()
+                    } else {
+                        props.prepareToast(`Error while updating`, 'danger')
+                    }
+                }
+                
             } else {
-                const response = await api.instance.post(`${hostname}${endpoints.createJobs}`, postObj);
+                props.prepareToast(msg, tType)
             }
-            props.closeHandler()
-            props.prepareToast(`Created Job: ${createJobObject.jobTitle}`, 'success')
-            // window.location.reload();
-            // TODO: toast to indicate creation
         } catch (error) {
             console.error(error);
         }
@@ -104,7 +120,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                 onChange={e => onchangeInput(e, 'jobTitle')}
                                 required
                                 type="text"
-                                placeholder={createJobObject.jobTitle}
+                                placeholder={'Web application'}
                                 defaultValue={props.jobToEdit ? props.jobToEdit.jobTitle : ''}
                             />
                             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -118,7 +134,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                 as="textarea"
                                 required
                                 type="text"
-                                placeholder={createJobObject.jobDescription}
+                                placeholder={'This web application requires ...'}
                                 defaultValue={props.jobToEdit ? props.jobToEdit.jobDescription : ''}
                             />
                             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -156,7 +172,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                     inputMode="numeric"
                                     type="number"
                                     aria-label="Initial"
-                                    placeholder={`${createJobObject.initialSalaryRange}`}
+                                    placeholder={'3000'}
                                     defaultValue={props.jobToEdit ? props.jobToEdit.initialSalaryRange : 0}
                                 />
                                 <Form.Control
@@ -165,7 +181,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                     inputMode="numeric"
                                     type="number"
                                     aria-label="Final"
-                                    placeholder={`${createJobObject.finalSalaryRange}`}
+                                    placeholder={'5000'}
                                     defaultValue={props.jobToEdit ? props.jobToEdit.finalSalaryRange : 5000}
                                 />
                                 <Form.Control.Feedback>OK!</Form.Control.Feedback>
@@ -199,7 +215,7 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                 onChange={e => onchangeInput(e, 'jobLocation')}
                                 required
                                 type="text"
-                                placeholder={createJobObject.jobLocation}
+                                placeholder={'Brazil'}
                                 defaultValue={props.jobToEdit ? props.jobToEdit.jobLocation : ''}
                             />
                             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
