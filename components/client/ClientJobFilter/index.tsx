@@ -26,6 +26,7 @@ export default function ClientJobFilter(props: ClientJobFilterProps) {
     const [selectedSkills, setSkillList] = useState([] as Skill[]);
     const [skills, setSkills] = useState([] as Skill[]);
     const [filterParams, setFilterParams] = useState(initialFilterState);
+    const [selectValue, setSelectValue] = useState('Choose Skill')
 
     async function fetchData() {
         const hostname = 'http://' + window.location.host;
@@ -138,8 +139,9 @@ export default function ClientJobFilter(props: ClientJobFilterProps) {
                             </div>
                             <div className="acordeon-form-grid-2">
                                 <Form.Group controlId="selectedSkill">
+                                    {/* TODO: need to make a component out of this */}
                                     <Form.Label>Skills</Form.Label>
-                                    <Form.Select onSelect={addSkill} onChange={addSkill} placeholder='Choose Skill'>
+                                    <Form.Select onSelect={addSkill} onChange={addSkill} placeholder='Choose Skill' value={selectValue}>
                                         <option key="disabled">Choose Skill</option>
                                         {skills.map((skill) => (
                                             <option key={skill.skillName} value={JSON.stringify(skill)}>{skill.skillName}</option>
@@ -147,7 +149,12 @@ export default function ClientJobFilter(props: ClientJobFilterProps) {
                                     </Form.Select>
                                 </Form.Group>
                                 <div style={{ marginTop: '10px' }}>
-                                    <SkillsBadges skills={skills} selectedSkills={selectedSkills} setHandler={setSkillList} />
+                                    <SkillsBadges
+                                        skills={skills}
+                                        selectedSkills={selectedSkills}
+                                        setHandler={setSkillList}
+                                        setValue={setSelectValue}
+                                    />
                                     <Button
                                         onClick={getJobs}
                                         variant="primary"

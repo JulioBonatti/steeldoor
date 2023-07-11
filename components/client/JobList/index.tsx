@@ -36,7 +36,7 @@ export default function JobList(props: jobListProps) {
     const EditModal = () => {
         if (props.admin) {
             return (
-                <Modal show={showModal} onHide={handleClose} dialogClassName="modal-90w" >
+                <Modal show={showModal} onHide={handleClose} dialogClassName="modal-90w" style={{zIndex: 900}} >
                     <Modal.Header closeButton>
                         <Modal.Title>Update Oportunity</Modal.Title>
                     </Modal.Header>

@@ -52,15 +52,17 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
     }
     const [validated, setValidated] = useState(false);
     const [selectedSkills, setSkillList] = useState(initialSkill as Skill[])
+    const [selectValue, setSelectValue] = useState('Choose Skill')
     const [createJobObject, setCreateJobObject] = useState(initialObject as JobObj)
+
     const addSkill = (el: any) => {
         if (el.target.value !== 'Choose Skill') {
             const selected: Skill = JSON.parse(el.target.value);
             const assertion = selectedSkills.map(slected => slected.id == selected.id).includes(true)
             if (!assertion) {
-                const skillList = structuredClone(selectedSkills)
-                skillList.push(selected);
-                setSkillList(skillList);
+                // const skillList = structuredClone(selectedSkills)
+                // skillList.push(selected);
+                setSkillList((prevSkillList) => [...prevSkillList, selected]);
             }
         }
     }
@@ -141,9 +143,10 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                         </Form.Group>
                     </Row>
                     <Row>
+                        {/* TODO: need to make a component out of this */}
                         <Form.Group controlId="selectedSkill">
                             <Form.Label>Skills</Form.Label>
-                            <Form.Select onSelect={addSkill} onChange={addSkill} placeholder='Choose Skill'>
+                            <Form.Select onChange={addSkill} placeholder='Choose Skill' value={selectValue}>
                                 <option key="disabled">Choose Skill</option>
                                 {props.skills.map(skill => {
                                     return (
@@ -152,7 +155,12 @@ export default function JobCreateUpdateForm(props: JobCreateUpdateFormProps) {
                                 })}
                             </Form.Select>
                         </Form.Group>
-                        <SkillsBadges skills={props.skills} setHandler={setSkillList} selectedSkills={selectedSkills} />
+                        <SkillsBadges 
+                        skills={props.skills} 
+                        setHandler={setSkillList} 
+                        selectedSkills={selectedSkills} 
+                        setValue={setSelectValue}
+                        />
                     </Row>
                 </Col>
                 <Col>

@@ -10,7 +10,8 @@ type Skill = {
 type SkillbadgesProps = {
     skills: Skill[],
     selectedSkills: Skill[]
-    setHandler: Dispatch<SetStateAction<Skill[]>>
+    setHandler: Dispatch<SetStateAction<Skill[]>>,
+    setValue: Dispatch<SetStateAction<string>>
 }
 
 export default function SkillsBadges(props: SkillbadgesProps) {
@@ -19,6 +20,7 @@ export default function SkillsBadges(props: SkillbadgesProps) {
         const filteredSkills = props.selectedSkills
             .filter(actualSkill => actualSkill.skillName !== skill.skillName);
         props.setHandler(filteredSkills);
+        props.setValue('Choose Skill')
     }
 
     return (
